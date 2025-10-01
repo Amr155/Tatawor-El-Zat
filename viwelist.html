@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Tatawor-El-Zat </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* التنسيقات العامة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #FF6B6B;
+            --primary-dark: #FF5252;
+            --secondary: #2D3436;
+            --dark: #1E1E1E;
+            --light: #FFFFFF;
+            --accent: #74B9FF;
+            --accent-dark: #0984E3;
+            --card-bg: #2D3436;
+            --text-gray: #B2BEC3;
+            --gradient: linear-gradient(135deg, #FF6B6B 0%, #74B9FF 100%);
+            --gradient-dark: linear-gradient(135deg, #FF5252 0%, #0984E3 100%);
+            --section-bg: rgba(45, 52, 54, 0.6);
+            --success: #00B894;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1E1E1E 0%, #2D3436 100%);
+            color: var(--light);
+            line-height: 1.6;
+            padding-bottom: 70px;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* مشغل الفيديو */
+        .video-player-section {
+            padding: 1.5rem 0;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 500px;
+            background: #000;
+            border-radius: 15px;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-container:hover .video-controls {
+            opacity: 1;
+        }
+
+        .play-pause-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+            width: 0%;
+        }
+
+        .time-display {
+            color: white;
+            font-size: 0.9rem;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .video-title {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .video-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(116, 185, 255, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #00a885;
+            transform: translateY(-3px);
+        }
+
+        .btn i {
+            margin-left: 8px;
+        }
+
+        /* قائمة الحلقات */
+        .episodes-list {
+            background: var(--section-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            color: var(--light);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+        }
+
+        .section-title i {
+            margin-left: 10px;
+            color: var(--accent);
+        }
+
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .episode-card {
+            background: linear-gradient(145deg, #2D3436, #1E1E1E);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .episode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-color: var(--accent);
+        }
+
+        .episode-card.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .episode-card-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .episode-card-info {
+            padding: 1rem;
+        }
+
+        .episode-card-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .episode-card-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .episode-card-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 20px;
+        }
+
+        /* الشريط السفلي */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #2D3436 0%, #1E1E1E 100%);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem 0;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bottom-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 12px;
+            flex: 1;
+            max-width: 80px;
+            position: relative;
+        }
+
+        .bottom-nav a:hover,
+        .bottom-nav a.active {
+            color: var(--accent);
+            transform: translateY(-5px);
+            background: rgba(116, 185, 255, 0.1);
+        }
+
+        .bottom-nav a i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .bottom-nav a span {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .bottom-nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            width: 30px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        /* التجاوب */
+        @media (max-width: 1024px) {
+            .video-player {
+                height: 400px;
+            }
+
+            .episodes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .series-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .series-poster {
+                width: 100px;
+                height: 140px;
+            }
+
+            .series-title {
+                font-size: 1.5rem;
+            }
+
+            .video-player {
+                height: 300px;
+            }
+
+            .video-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
+
+            .episodes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .series-title {
+                font-size: 1.3rem;
+            }
+
+            .video-player {
+                height: 250px;
+            }
+
+            .video-controls {
+                padding: 0.5rem;
+            }
+
+            .play-pause-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .time-display {
+                font-size: 0.8rem;
+                min-width: 80px;
+            }
+
+            .episodes-list {
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+            }
+        }
+
+        /* تأثيرات دخول */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .episode-card {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .episode-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .episode-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .episode-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .episode-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .episode-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .episode-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        /* iframe (اليوتيوب) */
+        #player {
+            width: 100%;
+            height: 450px;
+            position: relative;
+            z-index: 1;
+            /* الفيديو في الخلف */
+        }
+
+        /* الغطاء الشفاف */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            /* شفاف */
+            z-index: 2;
+            /* فوق الفيديو */
+            pointer-events: auto;
+            /* يمنع الضغط على الفيديو */
+        }
+
+        /* أدوات التحكم */
+        .video-controls {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            z-index: 3;
+            /* أعلى من الكل */
+        }
+
+        .controls-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.25s ease-in-out;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+        }
+
+        .video-container:hover .controls-container,
+        .video-container.paused .controls-container {
+            opacity: 1;
+        }
+
+        .timeline-container {
+            height: 10px;
+            cursor: pointer;
+            width: 100%;
+            padding: 5px 0;
+        }
+
+        .timeline {
+            background-color: rgba(255, 255, 255, 0.4);
+            height: 3px;
+            width: 100%;
+            position: relative;
+        }
+
+        .timeline .progress {
+            background-color: #fff;
+            width: 0%;
+            height: 100%;
+            transition: width 0.1s linear;
+        }
+
+        .bottom-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 15px 10px;
+        }
+
+        .left-controls,
+        .right-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        .control-btn:hover {
+            opacity: 1;
+        }
+
+        .control-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        .time-display {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 60px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.4);
+            outline: none;
+            cursor: pointer;
+            border-radius: 2px;
+            margin-right: 8px;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            border: none;
+        }
+
+        .video-container:fullscreen,
+        .video-container:fullscreen iframe,
+        .video-container:fullscreen #player {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- مشغل الفيديو -->
+        <section class="video-player-section">
+            <div class="video-container">
+                <div id="player"></div>
+
+                <!-- الغطاء الشفاف -->
+                <div class="video-overlay"></div>
+
+                <div class="video-controls">
+                    <div class="controls-container">
+                        <div class="timeline-container">
+                            <div class="timeline">
+                                <div class="progress"></div>
+                            </div>
+                        </div>
+                        <div class="bottom-controls">
+                            <div class="left-controls">
+                                <button class="control-btn play-pause-btn">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"></path>
+                                    </svg>
+                                </button>
+                                <button class="control-btn rewind-btn">
+                                    <svg viewBox="0 0 24 24">
+                                        <g>
+                                            <path
+                                                d="M12,5V1L7,6l5,5V7c3.31,0,6,2.69,6,6s-2.69,6-6,6s-6-2.69-6-6H4c0,4.42,3.58,8,8,8s8-3.58,8-8S16.42,5,12,5z">
+                                            </path>
+                                        </g>
+                                        <g><text x="6" y="16.5" font-size="9" font-weight="bold" fill="#fff">10</text>
+                                        </g>
+                                    </svg>
+                                </button>
+                                <button class="control-btn forward-btn">
+                                    <svg viewBox="0 0 24 24">
+                                        <g>
+                                            <path
+                                                d="M12,5c-4.42,0-8,3.58-8,8s3.58,8,8,8s8-3.58,8-8S16.42,5,12,5z M12,19c-3.31,0-6-2.69-6-6s2.69-6,6-6s6,2.69,6,6S15.31,19,12,19z">
+                                            </path>
+                                        </g>
+                                        <g>
+                                            <path d="M12,7l-5,5l5,5V7z" transform="scale(-1, 1) translate(-24, 0)">
+                                            </path>
+                                        </g>
+                                        <g><text x="7" y="16.5" font-size="9" font-weight="bold" fill="#fff">10</text>
+                                        </g>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="right-controls">
+                                <span class="time-display">00:00</span>
+                                <div class="volume-container">
+                                    <button class="control-btn volume-btn">
+                                        <svg viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z">
+                                            </path>
+                                        </svg>
+                                    </button>
+                                    <input class="volume-slider" type="range" min="0" max="1" step="0.01" value="1">
+                                </div>
+                                <button class="control-btn settings-btn">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z">
+                                        </path>
+                                    </svg>
+                                </button>
+                                <button class="control-btn pip-btn">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M19 7h-8v6h8V7zm2-4H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z">
+                                        </path>
+                                    </svg>
+                                </button>
+                                <button class="control-btn fullscreen-btn">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z">
+                                        </path>
+                                    </svg>
+                                </button>
+                                <button class="control-btn cast-btn">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M21 3H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11z">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+        </section>
+    </div>
+
+    <!-- عنوان الفيديو -->
+    <h3 class="video-title" id="currentEpisodeTitle">جاري تحميل العنوان ...</h3>
+
+    <div class="video-actions">
+        <button class="btn btn-success" id="downloadCurrentEpisode">
+            <i class="fas fa-download"></i> تحميل الحلقة
+        </button>
+        <button class="btn btn-secondary">
+            <i class="fas fa-plus"></i> إضافة للمفضلة
+        </button>
+        <button class="btn btn-secondary">
+            <i class="fas fa-share"></i> مشاركة
+        </button>
+    </div>
+    </section>
+
+    <!-- قائمة الحلقات -->
+    <section class="episodes-list">
+        <h2 class="section-title"><i class="fas fa-list"></i> جميع الحلقات</h2>
+
+        <div class="episodes-grid" id="episodes-grid">
+            <!-- سيتم إضافة الحلقات هنا عبر JavaScript -->
+        </div>
+    </section>
+    </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const playlistId = urlParams.get("playlist");
+
+        // 🔑 API KEY (بدله بمفتاحك)
+        const API_KEY = "AIzaSyBvFuKWR_Q_tHR6I8ZU0Febz2O5jZrFcXA";
+
+        let player;
+        let episodes = [];
+        let isPlaying = false;
+        let captionsOn = false;
+        const initialPlayerHeight = 400; // ارتفاع افتراضي قبل الفول سكرين
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player("player", {
+                height: initialPlayerHeight,
+                width: "100%",
+                playerVars: {
+                    listType: "playlist",
+                    list: playlistId,
+                    controls: 0,
+                    modestbranding: 1,
+                    rel: 0,
+                    iv_load_policy: 3,
+                    fs: 0,
+                    disablekb: 1,
+                    cc_load_policy: 0
+                },
+                events: {
+                    onReady: onPlayerReady,
+                    onStateChange: onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady() {
+            loadEpisodes();
+            // ربط واجهة المستخدم
+            setupUI();
+            updateProgress();
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                isPlaying = true;
+                setPlayIcon("pause");
+            } else {
+                isPlaying = false;
+                setPlayIcon("play");
+            }
+        }
+
+        function setPlayIcon(type) {
+            const path = document.querySelector(".play-pause-btn svg path");
+            if (!path) return;
+            if (type === "pause") {
+                // رمز الوقف (عمودين)
+                path.setAttribute("d", "M6 19h4V5H6zm8-14v14h4V5h-4z");
+            } else {
+                // رمز التشغيل (مثلث)
+                path.setAttribute("d", "M8 5v14l11-7z");
+            }
+        }
+
+        // ربط عناصر الواجهة ووظائفها
+        function setupUI() {
+            // زر التشغيل/الإيقاف
+            document.querySelector(".play-pause-btn")?.addEventListener("click", () => {
+                if (!player) return;
+                if (isPlaying) player.pauseVideo();
+                else player.playVideo();
+            });
+
+            // النقر على الغطاء الشفاف لتشغيل/إيقاف
+            document.querySelector(".video-overlay")?.addEventListener("click", () => {
+                if (!player) return;
+                if (isPlaying) player.pauseVideo();
+                else player.playVideo();
+            });
+
+            // ترجيع/تقديم 10 ثواني
+            document.querySelector(".rewind-btn")?.addEventListener("click", () => {
+                try {
+                    let current = player.getCurrentTime();
+                    player.seekTo(Math.max(0, current - 10), true);
+                } catch (e) { console.warn(e); }
+            });
+            document.querySelector(".forward-btn")?.addEventListener("click", () => {
+                try {
+                    let current = player.getCurrentTime();
+                    player.seekTo(current + 10, true);
+                } catch (e) { console.warn(e); }
+            });
+
+            // التحكم في الصوت
+            const volumeSlider = document.querySelector(".volume-slider");
+            if (volumeSlider) {
+                // حجم القيمة في HTML متوقع 0..1
+                volumeSlider.addEventListener("input", (e) => {
+                    try { player.setVolume(e.target.value * 100); } catch (err) { }
+                });
+            }
+
+            // الشريط الزمني (نقر + سحب + لمس)
+            const timeline = document.querySelector(".timeline");
+            if (timeline) {
+                let scrubbing = false;
+
+                const seekFromEvent = (e) => {
+                    if (!player || !player.getDuration) return;
+                    const rect = timeline.getBoundingClientRect();
+                    const clientX = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+                    let x = clientX - rect.left;
+                    x = Math.max(0, Math.min(x, rect.width));
+                    const percent = x / rect.width;
+                    const dur = player.getDuration() || 0;
+                    if (dur > 0) player.seekTo(dur * percent, true);
+                };
+
+                timeline.addEventListener("click", seekFromEvent);
+                timeline.addEventListener("mousedown", (e) => { scrubbing = true; seekFromEvent(e); });
+                window.addEventListener("mousemove", (e) => { if (scrubbing) seekFromEvent(e); });
+                window.addEventListener("mouseup", () => { scrubbing = false; });
+
+                // لمس (mobile)
+                timeline.addEventListener("touchstart", (e) => { scrubbing = true; seekFromEvent(e); });
+                timeline.addEventListener("touchmove", (e) => { if (scrubbing) seekFromEvent(e); });
+                timeline.addEventListener("touchend", () => { scrubbing = false; });
+            }
+
+            // زر الفول سكرين
+            const fullscreenBtn = document.querySelector(".fullscreen-btn");
+            const videoContainer = document.querySelector(".video-container");
+            if (fullscreenBtn && videoContainer) {
+                fullscreenBtn.addEventListener("click", async () => {
+                    try {
+                        if (!document.fullscreenElement) {
+                            // طلب الدخول في وضع ملء الشاشة على الحاوية
+                            if (videoContainer.requestFullscreen) await videoContainer.requestFullscreen();
+                            else if (videoContainer.webkitRequestFullscreen) videoContainer.webkitRequestFullscreen();
+                            // ضبط حجم مشغل اليوتيوب ليتناسب مع الشاشة
+                            try { player.setSize(window.innerWidth, window.innerHeight); } catch (e) { }
+                        } else {
+                            if (document.exitFullscreen) await document.exitFullscreen();
+                        }
+                    } catch (err) { console.warn(err); }
+                });
+
+                // عند تغيير حالة الفول سكرين نعيد تعيين حجم المشغل
+                document.addEventListener("fullscreenchange", () => {
+                    try {
+                        if (document.fullscreenElement) {
+                            player.setSize(window.innerWidth, window.innerHeight);
+                        } else {
+                            player.setSize("100%", initialPlayerHeight);
+                        }
+                    } catch (e) { }
+                });
+            }
+
+            // زر الإعدادات — سننشئ قائمة صغيرة ديناميكياً داخل videoContainer
+            const settingsBtn = document.querySelector(".settings-btn");
+            if (settingsBtn && videoContainer) {
+                // إنشاء القائمة
+                const menu = document.createElement("div");
+                menu.className = "yt-settings-menu";
+                Object.assign(menu.style, {
+                    position: "absolute",
+                    right: "10px",
+                    top: "50px",
+                    background: "#1f1f1f",
+                    color: "#fff",
+                    padding: "8px",
+                    borderRadius: "8px",
+                    display: "none",
+                    zIndex: 9999,
+                    minWidth: "180px",
+                    boxShadow: "0 6px 18px rgba(0,0,0,0.4)",
+                    fontSize: "14px"
+                });
+
+                menu.innerHTML = `
+                <div style="margin-bottom:8px;font-weight:600">الإعدادات</div>
+                <button class="settings-subtitles" style="display:block;width:100%;margin-bottom:8px;padding:6px;border:none;border-radius:6px;background:#2a2a2a;color:#fff;cursor:pointer">الترجمة: <span class="sub-status">إيقاف</span></button>
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                    <button class="speed-btn" data-rate="0.5" style="padding:6px;border-radius:6px;border:none;cursor:pointer">0.5×</button>
+                    <button class="speed-btn" data-rate="1" style="padding:6px;border-radius:6px;border:none;cursor:pointer">1×</button>
+                    <button class="speed-btn" data-rate="1.25" style="padding:6px;border-radius:6px;border:none;cursor:pointer">1.25×</button>
+                    <button class="speed-btn" data-rate="1.5" style="padding:6px;border-radius:6px;border:none;cursor:pointer">1.5×</button>
+                    <button class="speed-btn" data-rate="2" style="padding:6px;border-radius:6px;border:none;cursor:pointer">2×</button>
+                </div>
+            `;
+
+                // تأكد أن الحاوية لديها position لعرض القائمة بشكل صحيح
+                if (getComputedStyle(videoContainer).position === "static") {
+                    videoContainer.style.position = "relative";
+                }
+                videoContainer.appendChild(menu);
+
+                // إظهار/إخفاء القائمة
+                settingsBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
+                });
+                // إغلاق القائمة بالنقر خارجها
+                document.addEventListener("click", () => { menu.style.display = "none"; });
+
+                // زر الترجمة داخل القائمة
+                const subBtn = menu.querySelector(".settings-subtitles");
+                const subStatus = menu.querySelector(".sub-status");
+                subBtn.addEventListener("click", () => {
+                    if (!player) return;
+                    try {
+                        if (captionsOn) {
+                            player.unloadModule("captions");
+                            captionsOn = false;
+                            subStatus.innerText = "إيقاف";
+                        } else {
+                            player.loadModule("captions");
+                            // حاول اختيار العربية أولاً، إن لم توجد سيبقى كما هو
+                            player.setOption("captions", "track", { languageCode: "ar" });
+                            captionsOn = true;
+                            subStatus.innerText = "تشغيل";
+                        }
+                    } catch (e) {
+                        console.warn(e);
+                        alert("التبديل للترجمة غير مدعوم في هذا الفيديو.");
+                    }
+                });
+
+                // أزرار السرعات
+                menu.querySelectorAll(".speed-btn").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        if (!player) return;
+                        const rate = parseFloat(btn.getAttribute("data-rate"));
+                        try { player.setPlaybackRate(rate); } catch (e) { }
+                        // تمييز الزر المحدد
+                        menu.querySelectorAll(".speed-btn").forEach(b => b.style.background = "");
+                        btn.style.background = "#333";
+                    });
+                });
+            }
+        } // نهاية setupUI
+
+        // تحديث شريط التقدم والوقت (يحفظ الوقت لكل فيديو منفرداً)
+        function updateProgress() {
+            if (player && player.getDuration) {
+                try {
+                    let duration = player.getDuration();
+                    if (duration && duration > 0) {
+                        let current = player.getCurrentTime();
+                        const timeDisplayEl = document.querySelector(".time-display");
+                        if (timeDisplayEl) timeDisplayEl.innerText = formatTime(current) + " / " + formatTime(duration);
+
+                        const progressEl = document.querySelector(".progress");
+                        if (progressEl) {
+                            let percent = (current / duration) * 100;
+                            progressEl.style.width = percent + "%";
+                        }
+
+                        // حفظ آخر ثانية للفيديو الحالي (مفتاح خاص بكل videoId)
+                        const vid = (player.getVideoData && player.getVideoData().video_id) || "";
+                        if (vid) localStorage.setItem("lastTime_" + vid, current);
+                    }
+                } catch (e) { /* بعض الدوال قد ترمي استثناء لو المشغل غير جاهز */ }
+            }
+            requestAnimationFrame(updateProgress);
+        }
+
+        function formatTime(sec) {
+            sec = Math.floor(sec || 0);
+            let min = Math.floor(sec / 60);
+            let s = sec % 60;
+            if (s < 10) s = "0" + s;
+            return min + ":" + s;
+        }
+
+        // تحميل الحلقات من اليوتيوب
+        function loadEpisodes() {
+            if (!playlistId) return;
+            fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${API_KEY}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.items) return;
+                    episodes = data.items.map((item, index) => ({
+                        id: index + 1,
+                        videoId: item.snippet?.resourceId?.videoId || "",
+                        title: item.snippet?.title || "بدون عنوان",
+                        description: item.snippet?.description || "",
+                        thumbnail: item.snippet?.thumbnails?.medium?.url || "fallback.jpg",
+                        duration: "",
+                        isCurrent: index === 0
+                    }));
+
+                    const episodesGrid = document.getElementById("episodes-grid");
+                    if (episodesGrid) {
+                        episodesGrid.innerHTML = "";
+                        episodes.forEach(ep => episodesGrid.innerHTML += createEpisodeCard(ep));
+                    }
+
+                    if (episodes.length > 0) {
+                        document.getElementById("currentEpisodeTitle") && (document.getElementById("currentEpisodeTitle").innerText = episodes[0].title);
+                        // شغّل الحلقة الأولى تلقائياً بعد تحميل القائمة
+                        playEpisode(episodes[0].videoId, episodes[0].title);
+                    }
+                })
+                .catch(err => console.error("خطأ في جلب البيانات:", err));
+        }
+
+        function createEpisodeCard(episode) {
+            const isCurrent = episode.isCurrent ? 'active' : '';
+            return `
+        <div class="episode-card ${isCurrent}" data-id="${episode.id}" data-video="${episode.videoId}" data-title="${episode.title}">
+          <img src="${episode.thumbnail}" alt="${episode.title}" class="episode-card-img">
+          <div class="episode-card-info">
+            <h3 class="episode-card-title" style="white-space:normal; overflow:visible; text-overflow:unset;">
+                ${episode.title}
+            </h3>
+            <div class="episode-card-meta">
+              <span>${episode.duration || "—"}</span>
+            </div>
+            <div class="episode-card-actions">
+              <button class="btn btn-small btn-primary watch-episode">
+                <i class="fas fa-play"></i> مشاهدة
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+        }
+
+        // تشغيل حلقة محددة مع استرجاع آخر زمن مشاهدة لها (إن وجد)
+        function playEpisode(videoId, title) {
+            if (!player || !videoId) return;
+            try {
+                player.loadVideoById(videoId);
+                document.getElementById("currentEpisodeTitle") && (document.getElementById("currentEpisodeTitle").innerText = title);
+
+                // استرجاع آخر ثانية محفوظة للفيديو هذا (إذا وُجد)
+                const saved = localStorage.getItem("lastTime_" + videoId);
+                if (saved) {
+                    const trySeek = setInterval(() => {
+                        try {
+                            if (player.getDuration && player.getDuration() > 0) {
+                                player.seekTo(parseFloat(saved), true);
+                                clearInterval(trySeek);
+                            }
+                        } catch (e) { }
+                    }, 200);
+                }
+            } catch (e) { console.warn(e); }
+        }
+
+        // أحداث DOMContentLoaded للتعامل مع بطاقات الحلقات
+        document.addEventListener("DOMContentLoaded", () => {
+            // نعيد تحميل الحلقات (لو لم تُحمّل سابقاً)
+            loadEpisodes();
+
+            document.addEventListener("click", function (e) {
+                if (e.target.classList.contains("watch-episode") || e.target.closest(".watch-episode")) {
+                    const episodeCard = e.target.closest(".episode-card");
+                    const videoId = episodeCard.getAttribute("data-video");
+                    const title = episodeCard.getAttribute("data-title");
+                    playEpisode(videoId, title);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
