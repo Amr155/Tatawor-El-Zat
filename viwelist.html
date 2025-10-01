@@ -613,6 +613,53 @@
             width: 100% !important;
             height: 100% !important;
         }
+        /* الحجم العادي (ديسكتوب) */
+.video-controls {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* أزرار التحكم */
+.control-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ====== 📱 موبايل (شاشات أصغر من 600px) ====== */
+@media (max-width: 600px) {
+    .video-controls {
+        padding: 5px;
+    }
+
+    .control-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .time-display {
+        font-size: 10px;
+    }
+
+    .volume-container {
+        display: none; /* نخفي التحكم في الصوت على الموبايل لو مش مهم */
+    }
+
+    .bottom-controls {
+        flex-wrap: wrap; /* نخلي الأزرار تنزل سطر جديد لو مفيش مساحة */
+        justify-content: space-between;
+    }
+
+    .left-controls, 
+    .right-controls {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+}
+
     </style>
 </head>
 
@@ -1111,5 +1158,6 @@
     </script>
 
 </body>
+
 
 </html>
