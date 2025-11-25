@@ -1,3 +1,29 @@
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 جنب بعض */
+    gap: 10px;
+    padding: 10px;
+}
+
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+
+/* للشاشات الأصغر جدًا (ممكن تخليها 2 بس) */
+@media (max-width: 480px) {
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 /**********************************/
 
 /* الشريط السفلي */
@@ -457,4 +483,5 @@ a {
     content: '★';
     margin-left: 5px;
     color: #FFD700;
+
 }
