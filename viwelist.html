@@ -15,14 +15,16 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 .video-controls {
-    opacity: 1;
-    transition: opacity 0.5s ease;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;   /* يمنع التفاعل وهي مخفية */
 }
 
-.video-controls.hidden {
-    opacity: 0;
-    pointer-events: none;
+.video-controls.visible {
+    opacity: 1;
+    pointer-events: auto;   /* يسمح بالتفاعل عند الظهور */
 }
+
 
         :root {
             --primary: #FF6B6B;
@@ -1214,37 +1216,43 @@
             });
         });
 
-
-
-        const videoContainer = document.querySelector('.video-container'); 
-const videoControls = document.querySelector('.video-controls');
+const video = document.querySelector("video");
+const controls = document.querySelector(".video-controls");
 
 let hideTimeout;
 
 // وظيفة إظهار الكنترولز
 function showControls() {
-    videoControls.classList.remove("hidden");
+    controls.classList.add("visible");
 
     clearTimeout(hideTimeout);
 
     hideTimeout = setTimeout(() => {
-        videoControls.classList.add("hidden");
-    }, 15000); // ← هنا مدة الإخفاء (15 ثانية)
+        controls.classList.remove("visible");
+    }, 10000); // ← تظهر 10 ثواني
 }
 
-// أي حركة → أظهر الكنترولز
-document.addEventListener("mousemove", showControls);
-document.addEventListener("touchstart", showControls);
+// عند الضغط على الفيديو
+video.addEventListener("click", () => {
 
-// تشغيل الفنكشن أول مرة
-showControls();
+    // لو الكنترولز ظاهرة ← أخفيها فوراً
+    if (controls.classList.contains("visible")) {
+        controls.classList.remove("visible");
+        clearTimeout(hideTimeout);
+        return;
+    }
 
+    // لو الكنترولز مخفية ← أظهرها لمدة 10 ثواني
+    showControls();
+});
+ 
     </script>
 
 </body>
 
 
 </html>
+
 
 
 
