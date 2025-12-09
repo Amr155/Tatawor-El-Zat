@@ -1213,12 +1213,39 @@
                 }
             });
         });
+
+
+
+        const videoContainer = document.querySelector('.video-container'); 
+const videoControls = document.querySelector('.video-controls');
+
+let hideTimeout;
+
+// وظيفة إظهار الكنترولز
+function showControls() {
+    videoControls.classList.remove("hidden");
+
+    clearTimeout(hideTimeout);
+
+    hideTimeout = setTimeout(() => {
+        videoControls.classList.add("hidden");
+    }, 15000); // ← هنا مدة الإخفاء (15 ثانية)
+}
+
+// أي حركة → أظهر الكنترولز
+document.addEventListener("mousemove", showControls);
+document.addEventListener("touchstart", showControls);
+
+// تشغيل الفنكشن أول مرة
+showControls();
+
     </script>
 
 </body>
 
 
 </html>
+
 
 
 
