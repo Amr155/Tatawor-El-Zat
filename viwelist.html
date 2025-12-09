@@ -17,12 +17,12 @@
 .video-controls {
     opacity: 0;
     transition: opacity 0.3s ease;
-    pointer-events: none;   /* يمنع التفاعل وهي مخفية */
+    pointer-events: none; /* مخفية */
 }
 
-.video-controls.visible {
+.video-controls.active {
     opacity: 1;
-    pointer-events: auto;   /* يسمح بالتفاعل عند الظهور */
+    pointer-events: auto; /* تظهر وتشتغل */
 }
 
 
@@ -1216,42 +1216,49 @@
             });
         });
 
-const video = document.querySelector("video");
-const controls = document.querySelector(".video-controls");
 
-let hideTimeout;
 
-// وظيفة إظهار الكنترولز
+
+
+
+
+        const controls = document.querySelector(".video-controls");
+const videoOverlay = document.querySelector(".video-overlay");
+
+let hideTimer = null;
+
+// 🔥 إظهار الكنترولز
 function showControls() {
-    controls.classList.add("visible");
+    controls.classList.add("active");
 
-    clearTimeout(hideTimeout);
-
-    hideTimeout = setTimeout(() => {
-        controls.classList.remove("visible");
-    }, 10000); // ← تظهر 10 ثواني
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+        controls.classList.remove("active");
+    }, 10000);
 }
 
-// عند الضغط على الفيديو
-video.addEventListener("click", () => {
-
-    // لو الكنترولز ظاهرة ← أخفيها فوراً
-    if (controls.classList.contains("visible")) {
-        controls.classList.remove("visible");
-        clearTimeout(hideTimeout);
-        return;
+// 🔥 الضغط على الشاشة (overlay أو الفيديو)
+document.querySelector(".video-container").addEventListener("click", () => {
+    if (controls.classList.contains("active")) {
+        controls.classList.remove("active");
+        clearTimeout(hideTimer);
+    } else {
+        showControls();
     }
-
-    // لو الكنترولز مخفية ← أظهرها لمدة 10 ثواني
-    showControls();
 });
- 
+
+// 🔥 منع الضغط على الكنترولز من غلقها
+controls.addEventListener("click", (e) => {
+    e.stopPropagation();
+});
+
     </script>
 
 </body>
 
 
 </html>
+
 
 
 
