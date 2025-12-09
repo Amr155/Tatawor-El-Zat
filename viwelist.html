@@ -495,250 +495,148 @@
 
 
 
+.video-container {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%; /* نسبة 16:9 */
+        background-color: #000;
+    }
 
-        /* الغطاء الشفاف */
-        .video-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            /* شفاف */
-            z-index: 2;
-            /* فوق الفيديو */
-            pointer-events: auto;
-            /* يمنع الضغط على الفيديو */
-        }
+    #player,
+    .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
 
-        /* أدوات التحكم */
-        .video-controls {
-            position: absolute;
-            bottom: 15px;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            z-index: 3;
-            /* أعلى من الكل */
-        }
+    .video-overlay {
+        background: transparent;
+        z-index: 1;
+    }
 
-        .controls-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            opacity: 0;
-            transition: opacity 0.25s ease-in-out;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
-        }
-
-        .video-container:hover .controls-container,
-        .video-container.paused .controls-container {
-            opacity: 1;
-        }
-
-        .timeline-container {
-            height: 10px;
-            cursor: pointer;
-            width: 100%;
-            padding: 5px 0;
-        }
-
-        .timeline {
-            background-color: rgba(255, 255, 255, 0.4);
-            height: 3px;
-            width: 100%;
-            position: relative;
-        }
-
-        .timeline .progress {
-            background-color: #fff;
-            width: 0%;
-            height: 100%;
-            transition: width 0.1s linear;
-        }
-
-        .bottom-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 5px 15px 10px;
-        }
-
-        .left-controls,
-        .right-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .control-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.9;
-            transition: opacity 0.2s;
-        }
-
-        .control-btn:hover {
-            opacity: 1;
-        }
-
-        .control-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: #fff;
-        }
-
-        .time-display {
-            color: #fff;
-            font-size: 0.9rem;
-        }
-
-        .volume-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .volume-slider {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 60px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.4);
-            outline: none;
-            cursor: pointer;
-            border-radius: 2px;
-            margin-right: 8px;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 12px;
-            height: 12px;
-            background: #fff;
-            border-radius: 50%;
-        }
-
-        .volume-slider::-moz-range-thumb {
-            width: 12px;
-            height: 12px;
-            background: #fff;
-            border-radius: 50%;
-            border: none;
-        }
-
-        .video-container:fullscreen,
-        .video-container:fullscreen iframe,
-        .video-container:fullscreen #player {
-            width: 100% !important;
-            height: 100% !important;
-        }
-        /* الحجم العادي (ديسكتوب) */
-.video-controls {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-/* أزرار التحكم */
-.control-btn svg {
-    width: 24px;
-    height: 24px;
-}
-
-/* ====== 📱 موبايل (شاشات أصغر من 600px) ====== */
-@media (max-width: 600px) {
     .video-controls {
-        padding: 5px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        padding: 20px 15px 10px;
+        z-index: 2;
+        opacity: 1;
+        transition: opacity 0.3s ease;
     }
 
-    .control-btn svg {
-        width: 18px;
-        height: 18px;
+    .video-controls.hidden {
+        opacity: 0;
+        pointer-events: none;
     }
 
-    .time-display {
-        font-size: 10px;
+    .controls-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
-    .volume-container {
-        display: none; /* نخفي التحكم في الصوت على الموبايل لو مش مهم */
+    .timeline-container {
+        width: 100%;
+        padding: 5px 0;
+        cursor: pointer;
+    }
+
+    .timeline {
+        width: 100%;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+        position: relative;
+    }
+
+    .progress {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 0%;
+        background: #ff0000;
+        border-radius: 3px;
     }
 
     .bottom-controls {
-        flex-wrap: wrap; /* نخلي الأزرار تنزل سطر جديد لو مفيش مساحة */
+        display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
-    .left-controls, 
+    .left-controls,
     .right-controls {
-        flex: 1;
         display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .control-btn {
+        background: transparent;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        transition: background-color 0.2s;
+        display: flex;
+        align-items: center;
         justify-content: center;
     }
-}
 
-        /* الحاوية */
-        .timeline-container {
-            width: 100%;
-            padding: 10px 0;
-            /* مسافة عشان يكون واضح */
-            cursor: pointer;
-        }
+    .control-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
 
-        /* الشريط */
-        .timeline {
-            width: 100%;
-            height: 8px;
-            /* سمك الشريط */
-            background: rgba(255, 255, 255, 0.3);
-            /* اللون الفاضي */
-            border-radius: 4px;
-            position: relative;
-            overflow: hidden;
-        }
+    .control-btn svg {
+        width: 24px;
+        height: 24px;
+        fill: white;
+    }
 
-        /* التقدم */
-        .timeline .progress {
-            height: 100%;
-            background: rgb(6, 95, 139);
-            /* اللون الأحمر أو أي لون تحبه */
-            width: 0%;
-            border-radius: 4px;
-            position: relative;
-        }
+    .time-display {
+        color: white;
+        font-size: 14px;
+        font-family: Arial, sans-serif;
+        min-width: 45px;
+    }
 
-        /* النقطة الكبيرة */
-        .timeline .progress::after {
-            content: "";
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translate(50%, -50%);
-            width: 18px;
-            /* حجم النقطة */
-            height: 18px;
-            /* حجم النقطة */
-            background: #fff;
-            border: 3px solid rgb(5, 94, 153);
-            /* إطار أحمر */
-            border-radius: 50%;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        }
+    .volume-container {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
 
+    .volume-slider {
+        width: 70px;
+        height: 4px;
+        -webkit-appearance: none;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+        outline: none;
+        opacity: 0;
+        transition: opacity 0.2s, width 0.2s;
+    }
 
+    .volume-container:hover .volume-slider {
+        opacity: 1;
+        width: 70px;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+    }
      
     </style>
 </head>
@@ -1378,6 +1276,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 </html>
+
 
 
 
